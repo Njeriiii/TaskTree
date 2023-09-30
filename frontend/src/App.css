@@ -103,3 +103,167 @@ body, html {
 .add-button:hover {
   background-color: #8243c0; /* Darker violet color on hover */
 }
+
+/* Button to show the sub-task form */
+.add-sub-task-button {
+  background-color: #a45ee7; /* Lighter violet color */
+  color: #fff;
+  border: none;
+  padding: 6px 10px; /* Adjust padding for smaller size */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Adjust font size for smaller text */
+  margin-top: 10px; /* Added some top margin for spacing */
+  margin-left: 10px;
+}
+
+.add-sub-task-button:hover {
+  background-color: #8243c0; /* Darker violet color on hover */
+}
+
+/* Sub-task form */
+.add-sub-task-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 10px auto; /* Added some margin for spacing */
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* Styles for input fields and select lists can be reused */
+.add-sub-task-form .input-field {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-sub-task-form .select-list {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Button styles */
+.add-sub-task-form button {
+  background-color: #a45ee7; /* Lighter violet color */
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px; /* Added some top margin for spacing */
+}
+
+.add-sub-task-form button[type="submit"] {
+  background-color: #a45ee7; /* Lighter violet color */
+}
+
+.add-sub-task-form button[type="submit"]:hover {
+  background-color: #8243c0; /* Darker violet color on hover */
+}
+
+
+/* Complete button */
+.complete-button {
+  background-color: #4caf50; /* Green color */
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px; /* Added some top margin for spacing */
+}
+
+.complete-button:hover {
+  background-color: #45a049; /* Darker green color on hover */
+}
+/* Newly Added Parent Task */
+.newly-added-task {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #3498db; /* Blue background color */
+  width: 80%; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the box horizontally */
+}
+
+.newly-added-task h2 {
+  font-size: 18px;
+  margin-bottom: 10px; /* Add margin for separation */
+}
+
+.newly-added-task ul {
+  list-style: none;
+  padding: 0;
+}
+
+.newly-added-task li {
+  margin: 5px 0; /* Reduced margin */
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.newly-added-task button {
+  background-color: #a45ee7; /* Lighter violet color */
+  color: #fff;
+  border: none;
+  padding: 6px 10px; /* Adjust padding for smaller size */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Adjust font size for smaller text */
+  margin-left: 10px;
+}
+
+.newly-added-task button:hover {
+  background-color: #8243c0; /* Darker violet color on hover */
+}
+
+/* CSS for Sub-Tasks List */
+.task-list {
+  margin-top: 20px;
+  width: 80%;
+  margin: 0 auto; /* Center the box horizontally */
+
+}
+
+.task-list h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.task-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-list li {
+  display: block;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #000000;
+  background-color: #8243c0; /* Add a background color */
+}
+
+.add-sub-task-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.add-sub-task-button:hover {
+  background-color: #0056b3;
+}
