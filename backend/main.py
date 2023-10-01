@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, render_template, url_for, jsonify
 from flask_login import login_required
-from backend.models import Task, SubTask
+from backend.models import Task
 
 from . import db
 
@@ -26,9 +26,14 @@ def add_task():
         data = request.json  # Receive data as JSON
         task_description = data.get("task")
         status = data.get("status")
+        parent_task_id = data.get("parent_task_id")
 
         if task_description:
-            new_task = Task(task_description=task_description, status=status)
+            new_task = Task(
+                task_description=task_description,
+                status=status,
+                parent_id=parent_task_id,
+            )
             db.session.add(new_task)
             db.session.commit()
 
@@ -49,42 +54,6 @@ def add_task():
     return jsonify({"message": "Invalid request method"}), 405
 
 
-# @main.route("/backend/add_sub_task", methods=["POST"])
-# def add_sub_task():
-#     if request.method == "POST":
-#         data = request.json  # Receive data as JSON
-#         task_description = data.get("task")
-#         status = data.get("status")
-#         parent_task_id = data.get(
-#             "parent_task_id"
-#         )  # Get the ID of the parent task from the request
-
-#         if task_description and parent_task_id:
-#             sub_task = SubTask(
-#                 task_description=task_description,
-#                 status=status,
-#                 parent_task=parent_task_id,
-#             )
-#             db.session.add(sub_task)
-#             db.session.commit()
-
-#             return (
-#                 jsonify(
-#                     {
-#                         "message": "Sub-Task added successfully",
-#                         "sub_task": sub_task.to_dict(),
-#                     }
-#                 ),
-#                 200,
-#             )
-#         else:
-#             return jsonify({"message": "Parent task not found"}), 404
-#         # else:
-#         #     return jsonify({"message": "Invalid sub-task data"}), 400
-
-#     return jsonify({"message": "Invalid request method"}), 405
-
-
 @main.route("/backend/add_sub_task", methods=["POST"])
 def add_sub_task():
     if request.method == "POST":
@@ -92,22 +61,23 @@ def add_sub_task():
         task_description = data.get("task")
         status = data.get("status")
         parent_task_id = data.get("parent_task_id")
+        print(parent_task_id)
 
         if not task_description:
             return jsonify({"message": "Task description is required"}), 400
 
-        if not parent_task_id:
+        if not parent_task_id or parent_task_id == 0:
             return jsonify({"message": "Parent task ID is required"}), 400
 
-        parent_task = Task.query.get(parent_task_id)
+        # parent_task = Task.query.get(parent_task_id)
 
-        if not parent_task:
-            return jsonify({"message": "Parent task not found"}), 404
+        # if not parent_task:
+        #     return jsonify({"message": "Parent task not found"}), 404
 
-        sub_task = SubTask(
+        sub_task = Task(
             task_description=task_description,
             status=status,
-            parent_task=parent_task,
+            parent_id=parent_task_id,
         )
 
         db.session.add(sub_task)
@@ -117,7 +87,9 @@ def add_sub_task():
             jsonify(
                 {
                     "message": "Sub-Task added successfully",
-                    "sub_task": sub_task.to_dict(),
+                    "task_id": sub_task.id,
+                    "task_description": sub_task.task_description,
+                    "parent_id": sub_task.parent_id,
                 }
             ),
             200,

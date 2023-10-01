@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 function AddTaskPage() {
   const [task, setTask] = useState('');
   const [status, setStatus] = useState('new');
-  const [newlyAddedTask, setNewlyAddedTask] = useState(null); // Store the newly added parent task
+  const [newlyAddedTask, setNewlyAddedTask] = useState(null);
   const [showSubTaskForm, setShowSubTaskForm] = useState(false);
   const [subTaskDescription, setSubTaskDescription] = useState('');
   const [subTasks, setSubTasks] = useState([]);
-
+  const [currentParentTask, setCurrentParentTask] = useState(null); // Store the current parent task
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,6 +28,7 @@ function AddTaskPage() {
           setStatus('new');
           // Store the newly added parent task
           setNewlyAddedTask(response.data);
+          setCurrentParentTask(response.data); // Set the current parent task
           console.log('Newly Added Task:', newlyAddedTask.data);
         } else {
           console.error('Response data is empty');
@@ -40,8 +41,9 @@ function AddTaskPage() {
     }
   };
 
-  const handleAddSubTask = () => {
+  const handleAddSubTask = (task) => {
     setShowSubTaskForm(true);
+    setCurrentParentTask(task);
   };
 
   const handleCancelSubTask = () => {
@@ -52,26 +54,30 @@ function AddTaskPage() {
   const handleAddSubTaskSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send the sub-task data to the backend and associate it with the parent task
-      const response = await axios.post('/backend/add_sub_task', {
-        task: subTaskDescription,
-        status: status,
-        parent_task_id: newlyAddedTask.task_id, // Use the ID of the newly added parent task
-      });
+      if (currentParentTask) {
+        console.log("current:", currentParentTask);
+        // Send the sub-task data to the backend and associate it with the parent task
+        const response = await axios.post('/backend/add_sub_task', {
+          task: subTaskDescription,
+          status: status,
+          parent_task_id: currentParentTask.task_id,
+        });
 
-      if (response.status === 200) {
-        if (response.data) {
-          // Add the newly created sub-task to the subTasks state
-          // setSubTasks(response.data);
-          setSubTasks([...subTasks, response.data]);
-          console.log('Sub-Task added:', response.data);
-          setShowSubTaskForm(false); // Hide the sub-task form
-          setSubTaskDescription(''); // Clear the sub-task input field
+        if (response.status === 200) {
+          if (response.data) {
+            // Add the newly created sub-task to the subTasks state
+            setSubTasks([...subTasks, response.data]);
+            console.log('Sub-Task added:', response.data);
+            setShowSubTaskForm(false); // Hide the sub-task form
+            setSubTaskDescription(''); // Clear the sub-task input field
+          } else {
+            console.error('Response data is empty');
+          }
         } else {
-          console.error('Response data is empty');
+          console.error('Failed to add sub-task');
         }
       } else {
-        console.error('Failed to add sub-task');
+        console.error('Current parent task is not set.');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -108,15 +114,15 @@ function AddTaskPage() {
       </form>
 
       {/* Display the newly added parent task */}
-      {newlyAddedTask && (
+      {currentParentTask && (
         <div className="newly-added-task">
           <h2>Newly Added Task:</h2>
           <ul>
-            <li key={newlyAddedTask.task_id}>
-              {newlyAddedTask.task_description}
+            <li key={currentParentTask.task_id}>
+              {currentParentTask.task_description}
               <button
                 className="add-sub-task-button"
-                onClick={() => handleAddSubTask(newlyAddedTask)}
+                onClick={() => handleAddSubTask(currentParentTask)}
               >
                 Add Sub-Task
               </button>
@@ -131,8 +137,8 @@ function AddTaskPage() {
           <h2>Sub-Tasks:</h2>
           <ul>
             {subTasks.map((subTask) => (
-              <li key={subTask.sub_task.id}>
-                {subTask.sub_task.task_description}
+              <li key={subTask.id}>
+                {subTask.task_description}
                 <button
                   className="add-sub-task-button"
                   onClick={() => handleAddSubTask(subTask)}
@@ -149,8 +155,8 @@ function AddTaskPage() {
       {showSubTaskForm && (
         <form className="add-sub-task-form" onSubmit={handleAddSubTaskSubmit}>
           {/* Display the description of the selected parent task as a heading */}
-          {newlyAddedTask.task_description && (
-            <h1>{newlyAddedTask.task_description}</h1>
+          {currentParentTask && (
+            <h1>{currentParentTask.task_description}</h1>
           )}
           <textarea
             type="text"
@@ -179,7 +185,6 @@ function AddTaskPage() {
       <button onClick={handleComplete} className="complete-button">
         Complete
       </button>
-
     </div>
   );
 }
