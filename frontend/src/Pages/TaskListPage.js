@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { useApi } from '../Contexts/ApiProvider';
+import axios from 'axios';
 
 function TaskListPage() {
   const [newTasks, setNewTasks] = useState([]); // State for 'NEW' status tasks
   const [pendingTasks, setPendingTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const location = useLocation();
+  const api = useApi(); // Initialize the API client using the custom hook
+
 
   // Define the fetchData function
   const fetchData = async () => {
     try {
-      const newResponse = await axios.get('/backend/get_tasks/new'); // Fetch 'NEW' status tasks
-      const pendingResponse = await axios.get('/backend/get_tasks/pending');
-      const completedResponse = await axios.get('/backend/get_tasks/completed');
+      const newResponse = await api.get('/get_tasks/new');
+      const pendingResponse = await api.get('/get_tasks/pending');
+      const completedResponse = await api.get('/get_tasks/completed');
 
       if (
         newResponse.status === 200 &&
         pendingResponse.status === 200 &&
         completedResponse.status === 200
       ) {
-        setNewTasks(newResponse.data.tasks);
-        setPendingTasks(pendingResponse.data.tasks);
-        setCompletedTasks(completedResponse.data.tasks);
+        setNewTasks(newResponse.body.tasks);
+        setPendingTasks(pendingResponse.body.tasks);
+        setCompletedTasks(completedResponse.body.tasks);
       } else {
         console.error('Failed to fetch tasks');
       }

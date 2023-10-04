@@ -44,6 +44,7 @@ def add_task():
                         "message": "Task added successfully",
                         "task_id": new_task.id,
                         "task_description": new_task.task_description,
+                        "task_status": new_task.status,
                     }
                 ),
                 200,

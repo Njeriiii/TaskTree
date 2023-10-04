@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useApi } from '../Contexts/ApiProvider';
 
 function AddTaskPage() {
   const [task, setTask] = useState('');
@@ -11,25 +12,28 @@ function AddTaskPage() {
   const [subTasks, setSubTasks] = useState([]);
   const [currentParentTask, setCurrentParentTask] = useState(null); // Store the current parent task
   const navigate = useNavigate();
+  const api = useApi(); // Initialize the API client using the custom hook
 
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/backend/add_task', {
+      const response = await api.post('/add_task', {
         task: task,
         status: status,
       });
 
       if (response.status === 200) {
-        if (response.data) {
-          console.log('Task added:', response.data.task_id);
+        console.log(response);
+        if (response.body) {
+          console.log('Task added:', response.body.task_id);
           // Clear the task input field
           setTask('');
           setStatus('new');
           // Store the newly added parent task
-          setNewlyAddedTask(response.data);
-          setCurrentParentTask(response.data); // Set the current parent task
-          console.log('Newly Added Task:', newlyAddedTask.data);
+          setNewlyAddedTask(response.body);
+          setCurrentParentTask(response.body); // Set the current parent task
+          console.log('Newly Added Task:', newlyAddedTask.body);
         } else {
           console.error('Response data is empty');
         }
@@ -57,17 +61,17 @@ function AddTaskPage() {
       if (currentParentTask) {
         console.log("current:", currentParentTask);
         // Send the sub-task data to the backend and associate it with the parent task
-        const response = await axios.post('/backend/add_sub_task', {
+        const response = await api.post('/add_sub_task', {
           task: subTaskDescription,
           status: status,
           parent_task_id: currentParentTask.task_id,
         });
 
         if (response.status === 200) {
-          if (response.data) {
+          if (response.body) {
             // Add the newly created sub-task to the subTasks state
-            setSubTasks([...subTasks, response.data]);
-            console.log('Sub-Task added:', response.data);
+            setSubTasks([...subTasks, response.body]);
+            console.log('Sub-Task added:', response.body);
             setShowSubTaskForm(false); // Hide the sub-task form
             setSubTaskDescription(''); // Clear the sub-task input field
           } else {

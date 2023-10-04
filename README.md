@@ -1,3 +1,8 @@
+### Important Links
+https://dba.stackexchange.com/questions/81311/why-would-a-table-use-its-primary-key-as-a-foreign-key-to-itself
+
+
+
 ## React Concepts Used
 
 1. **Functional Components**: Both `AddTaskPage` and `TaskListPage` are functional components, defining UI components using JavaScript functions.
