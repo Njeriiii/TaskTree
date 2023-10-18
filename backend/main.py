@@ -7,14 +7,19 @@ from . import db
 main = Blueprint("main", __name__)
 
 
-@main.route("/backend/get_tasks/<status>", methods=["GET"])
-def get_tasks(status):
-    if status not in ["new", "pending", "completed"]:
-        return jsonify({"message": "Invalid status"}), 400
+@main.route("/backend/get_tasks", methods=["GET"])
+def get_tasks():
+    # if status not in ["new", "pending", "completed"]:
+    #     return jsonify({"message": "Invalid status"}), 400
 
-    tasks = Task.query.filter_by(status=status).all()
+    tasks = Task.query.all()
     task_list = [
-        {"id": task.id, "task_description": task.task_description} for task in tasks
+        {
+            "id": task.id,
+            "task_description": task.task_description,
+            "parent_task_id": task.parent_id,
+        }
+        for task in tasks
     ]
 
     return jsonify({"tasks": task_list}), 200
@@ -45,6 +50,7 @@ def add_task():
                         "task_id": new_task.id,
                         "task_description": new_task.task_description,
                         "task_status": new_task.status,
+                        "parent_task_id": new_task.parent_id,
                     }
                 ),
                 200,

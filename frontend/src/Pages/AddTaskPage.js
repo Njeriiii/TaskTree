@@ -27,9 +27,11 @@ function AddTaskPage() {
         console.log(response);
         if (response.body) {
           console.log('Task added:', response.body.task_id);
+
           // Clear the task input field
           setTask('');
           setStatus('new');
+          
           // Store the newly added parent task
           setNewlyAddedTask(response.body);
           setCurrentParentTask(response.body); // Set the current parent task

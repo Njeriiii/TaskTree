@@ -2,7 +2,6 @@ import axios from 'axios';
 
 // Import the BASE_API_URL from environment variables
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
-console.log(BASE_API_URL)
 
 // Create a class for the ApiClient
 export default class ApiClient {
@@ -18,7 +17,6 @@ export default class ApiClient {
   async request(options) {
     // Convert query parameters into a string and add a '?' if there are any -- to signify the beginning of query parameters
     let query = new URLSearchParams(options.query || {}).toString();
-    console.log(query)
     let queryUrl = ''; // Define 'queryUrl' here with an empty string
 
     if (query !== '') {
