@@ -18,7 +18,7 @@ function AddTask() {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
         const response = await api.post('/add_task', {
             task: task,

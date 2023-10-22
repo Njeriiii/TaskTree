@@ -21,14 +21,14 @@ body, html {
   margin: 0 10px;
 }
 
-/* Task list container */
+/* Task Container */
 .task-list-container {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
 }
 
-/* Task column */
+/* Task Column */
 .task-column {
   flex: 1;
   padding: 20px;
@@ -38,17 +38,54 @@ body, html {
   margin: 0 10px;
 }
 
-.task-title {
-  font-size: 18px;
+/* Task Description */
+.task-description {
+  font-size: 16px;
   margin-bottom: 10px;
 }
 
-/* Task item */
-.task-item {
+/* Toggle Subtasks Button */
+.show-subtask-button {
+  background-color: #a45ee7;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.show-subtask-button:hover {
+  background-color: #8243c0;
+}
+
+/* Subtask Item */
+.subtask-item {
+  margin: 5px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0;
+}
+
+/* Add Subtask Button */
+.add-subtask-button {
+  background-color: #a45ee7;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.add-subtask-button:hover {
+  background-color: #8243c0;
 }
 
 /* Delete button */
@@ -267,3 +304,5 @@ body, html {
 .add-sub-task-button:hover {
   background-color: #0056b3;
 }
+
+

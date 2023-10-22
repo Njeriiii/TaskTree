@@ -7,8 +7,13 @@ import ApiClient from '../ApiClient';
 // Create a new context instance
 const ApiContext = createContext();
 
+// useApi is a custom hook function for accessing the API context
+export function useApi() {
+  return useContext(ApiContext);
+}
+
 // ApiProvider is a component that wraps its children with the API context
-export default function ApiProvider({ children }) {
+function ApiProvider({ children }) {
   // Initialize a new instance of the ApiClient
   const api = new ApiClient();
 
@@ -21,7 +26,4 @@ export default function ApiProvider({ children }) {
   );
 }
 
-// useApi is a custom hook function for accessing the API context
-export function useApi() {
-  return useContext(ApiContext);
-}
+export default ApiProvider;

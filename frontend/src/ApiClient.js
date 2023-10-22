@@ -66,7 +66,6 @@ export default class ApiClient {
 
   // Method for making a POST request
   async post(url, body, options) {
-    console.log('yay');
     return this.request({ method: 'POST', url, body, ...options });
   }
 

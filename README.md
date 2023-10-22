@@ -1,6 +1,10 @@
 ### Important Links
 https://dba.stackexchange.com/questions/81311/why-would-a-table-use-its-primary-key-as-a-foreign-key-to-itself
 
+## Initialising the app
+export FLASK_APP=backend
+export FLASK_DEBUG=1
+flask run --host=0.0.0.0 --port=5162
 
 
 ## React Concepts Used
@@ -55,3 +59,24 @@ These are key React concepts and features illustrated in the provided code, esse
 6. Upon successful completion of the task addition, you can use the 'newlyAddedTask' and 'currentParentTask' state variables to track the newly added task and its relationship with the parent task.
 
 In summary, when you click the "Add Subtask" button in the `Task` component, you navigate to the "Add Task" page with the 'parent_task_id' as a query parameter. In the "Add Task" page, you extract and use this 'parent_task_id' to establish the relationship between the newly added subtask and its parent task.
+
+
+
+### DB schema for the database where each task is linked to a user:
+
+**User Table:**
+- `id` (Primary Key, Integer): Unique identifier for each user.
+- `first_name` (String): First name of the user.
+- `last_name` (String): Last name of the user.
+- `email` (String): Email address of the user (should be unique).
+- `password` (String): Hashed password of the user.
+- `tasks` (Relationship to Task): One-to-Many relationship linking users to their tasks.
+
+**Task Table:**
+- `id` (Primary Key, Integer): Unique identifier for each task.
+- `task_description` (String): Description of the task.
+- `status` (String): Status of the task (e.g., "new," "pending," "completed").
+- `user_id` (Foreign Key, Integer): The ID of the user who owns the task (linked to the `User` table).
+- `parent_id` (Foreign Key, Integer): The ID of the parent task if it's a subtask (self-referencing).
+
+With this schema, each user can have multiple tasks associated with them, and tasks can have a `user_id` field to establish a link to the user who owns that task. Additionally, you can have subtasks by using the `parent_id` field to create a self-referencing relationship within the `Task` table.

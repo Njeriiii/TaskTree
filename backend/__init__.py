@@ -1,31 +1,47 @@
 import os
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from flask import request, Response
+from flask_login import LoginManager
 
-# init SQLAlchemy so we can use it later in our models
+
+# Initialize SQLAlchemy for later use in your models
 db = SQLAlchemy()
+
+# Initialize the login manager
+login_manager = LoginManager()
 
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
 
-    app.config["SECRET_KEY"] = "secret-key-goes-here"
+    # Configure your app
+    app.config["SECRET_KEY"] = "your_secret_key"  # Replace with your secret key
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 
+    # Initialize SQLAlchemy with your app
     db.init_app(app)
 
-    from . import models
+    login_manager.init_app(app)  # Initialize the login manager with your Flask app
 
     with app.app_context():
+        # Create your database tables
         db.create_all()
 
-    from .main import main as main_blueprint
+    # Import your models
+    from . import models
 
-    CORS(main_blueprint)
+    # Import your blueprints (main and auth)
+    from .main import main as main_blueprint
+    from .auth import auth as auth_blueprint
+
+    # Register your blueprints
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(auth_blueprint)
+
+    # login_manager.login_view = "auth.login"  # Set the login view (the login route)
+    login_manager.init_app(app)  # Initialize the login manager with your Flask app
 
     if __name__ == "__main__":
         app.run(host="0.0.0.0", port=5162)
