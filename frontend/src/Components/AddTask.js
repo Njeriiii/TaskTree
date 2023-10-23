@@ -13,7 +13,9 @@ function AddTask() {
 
     // Retrieve parent_task_id from URL parameters
     const queryParams = new URLSearchParams(location.search);
+    const board_id = queryParams.get('board_id'); // Extract board_id
     const parent_task_id = queryParams.get('parent_task_id');
+
 
 
 const handleSubmit = async (e) => {
@@ -24,13 +26,14 @@ const handleSubmit = async (e) => {
             task: task,
             status: status,
             parent_task_id: parent_task_id,
+            board_id: board_id,
         });
         
         
     if (response.status === 200) {
         console.log(response);
         if (response.body) {
-        console.log('Task added:', response.body.task_id);
+        console.log('Task added:', response.body);
 
         // Clear the task input field
         setTask('');
@@ -49,11 +52,11 @@ const handleSubmit = async (e) => {
     } catch (error) {
     console.error('Error:', error);
     }
-    navigate('/')
+    navigate(-1)
 };
 const handleComplete = () => {
     // Redirect to TaskListPage after completing the process
-    navigate('/');
+    navigate(-1);
   };
 
 

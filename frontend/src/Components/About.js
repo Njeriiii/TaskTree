@@ -1,4 +1,6 @@
 // pages/About.js
+// NOT IN USE
+
 
 import React from "react";
 

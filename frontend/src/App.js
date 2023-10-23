@@ -10,7 +10,6 @@ import PrivateRoute from './Components/PrivateRoute';
 import './App.css';
 import Header from "./Components/Header";
 import AddTasksPage from './Pages/AddTasksPage';
-import TaskPage from './Pages/TaskPage';
 import { TasksProvider } from './Contexts/TasksProvider';
 import TaskTreePage from './Pages/TaskTreePage';
 import EditTaskForm from './Components/EditTask';
@@ -19,6 +18,8 @@ import ChangeParentTask from './Components/ChangeParentTask';
 import Registration from './Pages/Register';
 import Login from './Pages/Login';
 import Logout from './Components/Logout';
+import DisplayPage from './Pages/DisplayPage';
+import DisplayTaskTree from './Components/DisplayTaskTree';
 
 export default function App() {
 
@@ -31,9 +32,12 @@ export default function App() {
               <TasksProvider>
                 <Routes>
                   <Route path="*" element={<Navigate to="/" />} />
-                  <Route path="/" element={<TaskPage />} />
-                  <Route path="/add_task" element={ <PrivateRoute> <AddTasksPage /> </PrivateRoute>} />
-                  <Route path="/task_tree" element={<TaskTreePage />} />
+                  <Route path="/" element={< DisplayPage />} />
+                  {/* <Route path="/task_archive" element={ <PrivateRoute> <DisplayPage /> </PrivateRoute>} /> */}
+                  {/* <Route path="/" element={< TaskPage />} /> */}
+                  <Route path="/add_task" element={ <AddTasksPage /> } />
+                  {/* <Route path="/task_tree" element={<TaskTreePage />} /> */}
+                  <Route path="/task_tree" element={<DisplayTaskTree />} />
                   <Route path="/edit_task" element={<EditTaskForm />} />
                   <Route path="/task_archive" element={ <PrivateRoute> <TaskArchive /> </PrivateRoute>} />
                   <Route path="/change_parent" element={<ChangeParentTask />} />

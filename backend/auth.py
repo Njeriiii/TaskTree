@@ -66,13 +66,24 @@ def login():
     if not user or not check_password_hash(user.password, password):
         return jsonify({"message": "Invalid email or password"}), 401
 
-    next_page = request.args.get("next")
-    if not next_page or url_parse(next_page).netloc != "":
-        next_page = url_for("/")
-    print(next_page)
+    # next_page = request.args.get("next")
+    # if not next_page or url_parse(next_page).netloc != "":
+    #     next_page = url_for("/")
+    # print(next_page)
 
     login_user(user)
     session["user_id"] = user.user_id
+
+    return (
+        jsonify(
+            {
+                "message": "User logged in successfully",
+                "user_id": user.user_id,
+                "email": user.email,
+            }
+        ),
+        200,
+    )
 
     # return (
     #     jsonify(
@@ -84,8 +95,10 @@ def login():
     #     ),
     #     200,
     # )
+
+    # return jsonify({"message": "Invalid request method"}), 405
     # Redirect to the target page
-    return redirect(next_page)
+    # return redirect(next_page)
 
 
 @auth.route("/backend/logout", methods=["GET"])

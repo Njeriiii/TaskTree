@@ -1,12 +1,63 @@
 from flask import Blueprint, request, redirect, render_template, url_for, jsonify
 from flask_login import login_required
-from backend.models import Task
+from backend.models import Task, Board
 from flask_login import login_required, logout_user, current_user, login_user
 
 
 from . import db
 
 main = Blueprint("main", __name__)
+
+
+@main.route("/backend/get_boards", methods=["GET"])
+@login_required
+def get_boards():
+    # Get all boards associated with the current user
+    user_id = current_user.user_id
+    boards = Board.query.filter_by(user_id=user_id).all()
+
+    board_list = [
+        {
+            "board_id": board.board_id,
+            "board_title": board.board_title,
+            # You can include additional details or actions related to the boards here
+        }
+        for board in boards
+    ]
+
+    return jsonify({"boards": board_list}), 200
+
+
+@main.route("/backend/create_board", methods=["POST"])
+@login_required
+def create_board():
+    if request.method == "POST":
+        data = request.json  # Receive data as JSON
+        title = data.get("title")
+
+        if title:
+            # Get the user ID of the currently logged-in user
+            user_id = current_user.user_id
+
+            new_board = Board(board_title=title, user_id=user_id)
+            db.session.add(new_board)
+            db.session.commit()
+
+            # Return the ID and title of the newly created board
+            return (
+                jsonify(
+                    {
+                        "message": "Board created successfully",
+                        "board_id": new_board.board_id,
+                        "board_title": new_board.board_title,
+                    }
+                ),
+                200,
+            )
+        else:
+            return jsonify({"message": "Invalid board title"}), 400
+
+    return jsonify({"message": "Invalid request method"}), 405
 
 
 @main.route("/backend/get_tasks", methods=["GET"])
@@ -24,6 +75,7 @@ def get_tasks():
             "task_description": task.task_description,
             "parent_task_id": task.parent_id,
             "status": task.status,
+            "board_id": task.board_id,
         }
         for task in tasks
     ]
@@ -39,6 +91,7 @@ def add_task():
         task_description = data.get("task")
         status = data.get("status")
         parent_task_id = data.get("parent_task_id")
+        board_id = data.get("board_id")
 
         # Get the user ID of the currently logged-in user
         user_id = current_user.user_id
@@ -49,6 +102,7 @@ def add_task():
                 status=status,
                 parent_id=parent_task_id,
                 user_id=user_id,  # Associate the task with the current user
+                board_id=board_id,  # Associate the task with a board
             )
             db.session.add(new_task)
             db.session.commit()
@@ -62,6 +116,7 @@ def add_task():
                         "task_description": new_task.task_description,
                         "task_status": new_task.status,
                         "parent_task_id": new_task.parent_id,
+                        "board_id": new_task.board_id,
                     }
                 ),
                 200,

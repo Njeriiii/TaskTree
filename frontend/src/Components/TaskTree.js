@@ -1,3 +1,5 @@
+// NOT IN USE
+
 import React, { useState } from 'react';
 import { useTasksContext } from '../Contexts/TasksProvider';
 import Task from './Task';
@@ -36,7 +38,7 @@ function TaskTree() {
     return (
         <div>
             <h2>Tasks</h2>
-            {taskTree.map((task) => renderTask(task))} {/* Render the tasks and their subtasks */}
+            {taskTree.map((task) => renderTask(task))} Render the tasks and their subtasks
         </div>
     );
 }

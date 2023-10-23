@@ -21,6 +21,7 @@ export function AuthProvider({ children }) {
             if (response.status === 200) {
                 // Login was successful
                 fetchData(); // Fetch user data if needed
+                setIsAuthenticated(true);
             } else if (response.status === 401) {
                 console.error('Invalid email or password');
             } else {
@@ -39,7 +40,7 @@ export function AuthProvider({ children }) {
 
             if (response.status === 200) {
                 // Sign-up was successful
-                setIsAuthenticated(true);
+                // setIsAuthenticated(true);
                 fetchData(); // Fetch user data if needed
             } else {
                 console.error('Sign-up failed. Please try again.');
@@ -78,7 +79,7 @@ export function AuthProvider({ children }) {
                 const userData = response.body;
                 setUser(userData);
                 // setIsAuthenticated(true);
-                // console.log(isAuthenticated)
+                console.log(response)
             } else {
                 console.error('Failed to fetch user data');
             }
@@ -101,7 +102,8 @@ export function AuthProvider({ children }) {
                     setIsAuthenticated(true);
                     fetchData();
                     console.log("mschew")
-                    console.log(response)
+                    console.log(response.status)
+                    console.log(isAuthenticated)
                 }
             } catch (error) {
                 setIsAuthenticated(false);

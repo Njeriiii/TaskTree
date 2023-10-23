@@ -14,7 +14,9 @@ function Task({ task }) {
 
     const handleAddSubTaskClick = (e) => {
         const parentTaskId = e.target.getAttribute("data-task-id");
-        navigate(`/add_task?parent_task_id=${parentTaskId}`);
+        const BoardId = task.board_id;
+        navigate(`/add_task?board_id=${BoardId}&parent_task_id=${parentTaskId}`);
+        
     };
 
     const editTaskClick = () => {
@@ -45,6 +47,7 @@ function Task({ task }) {
 
         while (stack.length > 0) {
             const { task, depth } = stack.pop();
+            console.log(tasks)
 
             if (task) {
                 task.depth = depth;
@@ -53,12 +56,13 @@ function Task({ task }) {
 
             // Find subtasks of the current task
             const subtasks = tasks.filter(t => t.parent_task_id === (task ? task.id : parentTaskId));
+            console.log(subtasks)
 
             for (const subtask of subtasks) {
                 stack.push({ task: subtask, depth: depth + 1 });
             }
         }
-
+        console.log(tasks)
         return taskTree;
     }
 
