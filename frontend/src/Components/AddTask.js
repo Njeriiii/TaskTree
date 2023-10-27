@@ -1,27 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useApi } from '../Contexts/ApiProvider';
+import { useTasksContext } from '../Contexts/TasksProvider';
+
+// This component represents a form for adding new tasks. 
+// It uses React state to manage form input fields (task description and status).
+// The component uses the useApi custom hook to access the API client 
+// and make a POST request to add a new task when the form is submitted. 
+// The form content depends on whether it's adding a top-level task or a subtask to a parent task.
 
 function AddTask() {
-    const [task, setTask] = useState('');
-    const [status, setStatus] = useState('new');
-    const [newlyAddedTask, setNewlyAddedTask] = useState(null);
-    const navigate = useNavigate();
-    const api = useApi(); // Initialize the API client using the custom hook
-    const location = useLocation();
+    const [task, setTask] = useState(''); // State to manage the task description
+    const [status, setStatus] = useState('new'); // State to manage the task status
 
-    // Retrieve parent_task_id from URL parameters
+
+    // Get the navigation function for routing
+    const navigate = useNavigate();
+    
+    // Initialize the API client using the custom hook
+    const api = useApi();
+    
+    // Get the current location, which contains URL parameters
+    const location = useLocation();
+    
+    // Access the tasks context for parent task details
+    const tasks = useTasksContext();
+
+    // Retrieve from URL parameters
     const queryParams = new URLSearchParams(location.search);
     const board_id = queryParams.get('board_id'); // Extract board_id
-    const parent_task_id = queryParams.get('parent_task_id');
+    const board_title = queryParams.get('board_title'); // Extract board_title
+    const parent_task_id = parseInt(queryParams.get('parent_task_id')); // Extract parent_task_id
 
 
-
+// Function to handle form submission
 const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
+        // Make a POST request to add a new task
         const response = await api.post('/add_task', {
             task: task,
             status: status,
@@ -31,7 +48,6 @@ const handleSubmit = async (e) => {
         
         
     if (response.status === 200) {
-        console.log(response);
         if (response.body) {
         console.log('Task added:', response.body);
 
@@ -39,10 +55,6 @@ const handleSubmit = async (e) => {
         setTask('');
         setStatus('new');
         
-        // // Store the newly added parent task
-        // setNewlyAddedTask(response.body);
-        // setCurrentParentTask(response.body); // Set the current parent task
-        console.log('Newly Added Task:', newlyAddedTask.body);
         } else {
         console.error('Response data is empty');
         }
@@ -52,16 +64,29 @@ const handleSubmit = async (e) => {
     } catch (error) {
     console.error('Error:', error);
     }
+    // Redirect to previous page after completing the process
     navigate(-1)
 };
-const handleComplete = () => {
-    // Redirect to TaskListPage after completing the process
+
+// Function to handle cancellation
+const handleCancel = () => {
+    // Redirect to previous page
     navigate(-1);
-  };
+};
 
+// Find the parent task if it exists -- means item being added is a subtask
+const parent_task = (tasks.filter(task => task.id === parent_task_id))[0];
 
-    return (
-        <div>
+return (
+    <div className="add-task-container">
+        {
+        parent_task_id ? (
+            // If adding a subtask, display a message with the parent task's description
+            <p className="add-task-container-text" > Add a subtask to {parent_task.task_description} </p>
+        ):(
+            // If adding a top-level task, display a message with the board title
+        <p className="add-task-container-text" > Add a Task to {board_title} </p>
+        )}
         <form className="add-task-form" onSubmit={handleSubmit}>
             <textarea
             type="text"
@@ -84,12 +109,12 @@ const handleComplete = () => {
             </button>
         </form>
 
-        {/* Complete button */}
-        <button onClick={handleComplete} className="complete-button">
-            Complete
+        {/* Button to cancel the task addition */}
+        <button onClick={handleCancel} className="cancel-button">
+            Cancel
         </button>
-        </div>
-    );
-    }
+    </div>
+);
+}
 
 export default AddTask;

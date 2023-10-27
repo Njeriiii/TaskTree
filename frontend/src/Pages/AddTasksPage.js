@@ -1,19 +1,11 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../Contexts/AuthProvider';
-import AddTask from '../Components/AddTask';
+import AddTask from '../Components/AddTask'; // Import the AddTask component
 
-
+// AddTasksPage component represents a page for adding tasks
 function AddTasksPage() {
-    const { isAuthenticated } = useAuth();
-    console.log(isAuthenticated)
-
-    // if (!isAuthenticated) {
-    //     // Redirect to the login page if not authenticated
-    //     return <Navigate to="/login" />;
-    // }
 
     return (
+        // Render the AddTask component to display the task creation form
         <AddTask/>
     );
 }

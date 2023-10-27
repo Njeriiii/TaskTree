@@ -1,21 +1,33 @@
-from flask import Blueprint, request, redirect, render_template, url_for, jsonify
+from flask import Blueprint, request, jsonify
 from flask_login import login_required
 from backend.models import Task, Board
-from flask_login import login_required, logout_user, current_user, login_user
+from flask_login import login_required, current_user
 
 
 from . import db
 
+# Create a Blueprint for main routes
 main = Blueprint("main", __name__)
 
 
 @main.route("/backend/get_boards", methods=["GET"])
 @login_required
 def get_boards():
+    """
+    Retrieve boards associated with the current user.
+
+    Returns:
+    - A JSON response containing board details.
+    - In case of unauthorized access, an error message with a 401 status code.
+    """
+
     # Get all boards associated with the current user
     user_id = current_user.user_id
+
+    # Query the database to retrieve all boards associated with the user
     boards = Board.query.filter_by(user_id=user_id).all()
 
+    # Create a list of dictionaries containing board details
     board_list = [
         {
             "board_id": board.board_id,
@@ -25,12 +37,20 @@ def get_boards():
         for board in boards
     ]
 
+    # Return a JSON response with the list of boards
     return jsonify({"boards": board_list}), 200
 
 
 @main.route("/backend/create_board", methods=["POST"])
 @login_required
 def create_board():
+    """
+    Create a new board for the current user.
+
+    Returns:
+    - A JSON response containing the ID and title of the newly created board.
+    - In case of invalid data or request method, appropriate error messages with status codes.
+    """
     if request.method == "POST":
         data = request.json  # Receive data as JSON
         title = data.get("title")
@@ -39,6 +59,7 @@ def create_board():
             # Get the user ID of the currently logged-in user
             user_id = current_user.user_id
 
+            # Create a new board with the provided title
             new_board = Board(board_title=title, user_id=user_id)
             db.session.add(new_board)
             db.session.commit()
@@ -60,15 +81,62 @@ def create_board():
     return jsonify({"message": "Invalid request method"}), 405
 
 
+@main.route("/backend/update_board/<int:board_id>", methods=["PUT"])
+def update_board(board_id):
+    """
+    Update an existing board with new information.
+
+    Returns:
+    - A JSON response containing the ID and title of the updated board.
+    - In case of an invalid board or request method, appropriate error messages with status codes.
+    """
+    if request.method == "PUT":
+        data = request.json  # Receive data as JSON
+        board_title = data["board_title"]
+
+        board = Board.query.get(board_id)
+
+        if board:
+            # Update the board with the provided data
+            board.board_title = board_title
+
+            db.session.commit()
+
+            # Return the updated board with its ID and title
+            return (
+                jsonify(
+                    {
+                        "message": "Board updated successfully",
+                        "board_id": board.board_id,
+                        "board_title": board.board_title,
+                    }
+                ),
+                200,
+            )
+        else:
+            return jsonify({"message": "Board not found"}, 404)
+
+    return jsonify({"message": "Invalid request method"}, 405)
+
+
 @main.route("/backend/get_tasks", methods=["GET"])
 @login_required
 def get_tasks():
-    # if status not in ["new", "pending", "completed"]:
-    #     return jsonify({"message": "Invalid status"}), 400
+    """
+    Retrieve tasks associated with the current user.
 
-    user_id = current_user.user_id  # Get the user ID of the currently logged-in user
+    Returns:
+    - A JSON response containing task details.
+    - In case of unauthorized access, an error message with a 401 status code.
+    """
+
+    # Get the user ID of the currently logged-in user
+    user_id = current_user.user_id
+
+    # Retrieve all tasks associated with the user
     tasks = Task.query.filter_by(user_id=user_id).all()
 
+    # Create a list of tasks and their details
     task_list = [
         {
             "id": task.task_id,
@@ -86,6 +154,13 @@ def get_tasks():
 @main.route("/backend/add_task", methods=["POST"])
 @login_required
 def add_task():
+    """
+    Add a new task for the current user.
+
+    Returns:
+    - A JSON response containing the ID, description, status, parent task ID, and board ID of the newly created task.
+    - In case of invalid task description or request method, appropriate error messages with status codes.
+    """
     if request.method == "POST":
         data = request.json  # Receive data as JSON
         task_description = data.get("task")
@@ -97,6 +172,7 @@ def add_task():
         user_id = current_user.user_id
 
         if task_description:
+            # Create a new task with the provided details
             new_task = Task(
                 task_description=task_description,
                 status=status,
@@ -107,7 +183,7 @@ def add_task():
             db.session.add(new_task)
             db.session.commit()
 
-            # Return the ID of the newly created task
+            # Return the ID of the newly created task along with other details
             return (
                 jsonify(
                     {
@@ -129,6 +205,13 @@ def add_task():
 
 @main.route("/backend/update_task/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
+    """
+    Update an existing task with new information.
+
+    Returns:
+    - A JSON response containing the ID, description, and status of the updated task.
+    - In case of an invalid task or request method, appropriate error messages with status codes.
+    """
     if request.method == "PUT":
         data = request.json  # Receive data as JSON
         task_description = data.get("task_description")
@@ -143,7 +226,7 @@ def update_task(task_id):
 
             db.session.commit()
 
-            # Return the updated task
+            # Return the updated task with its ID, description, and status
             return (
                 jsonify(
                     {
@@ -161,36 +244,65 @@ def update_task(task_id):
     return jsonify({"message": "Invalid request method"}, 405)
 
 
-@main.route("/backend/change_parent_task", methods=["PUT"])
-def change_parent_task():
-    # Parse subtask_id and new_parent_task_id from the request parameters
-    subtask_id = int(request.args.get("subtask_id"))
-    new_parent_task_id = int(request.args.get("new_parent_task_id"))
+@main.route("/backend/mark_task_complete", methods=["PUT"])
+def mark_task_complete():
+    """
+    Mark a task as 'completed'.
 
-    # Retrieve the subtask and the new parent task
-    subtask = Task.query.get(subtask_id)
-    new_parent_task = Task.query.get(new_parent_task_id)
+    Returns:
+    - A JSON response indicating the success of marking the task as 'completed'.
+    - In case of an invalid task or request method, appropriate error messages with status codes.
+    """
+    if request.method == "PUT":
+        task_id = int(request.args.get("task_id"))
 
-    if subtask is None or new_parent_task is None:
-        return jsonify({"message": "Subtask or new parent task not found"}, 404)
+        task = Task.query.get(task_id)
+
+        if task:
+            task.status = "completed"
+
+            db.session.commit()
+
+            # Return the updated task with its new status
+            return (
+                jsonify(
+                    {
+                        "message": "Task 'marked as complete' successfully",
+                        "task_id": task.task_id,
+                        "task_description": task.task_description,
+                        "status": task.status,
+                    }
+                ),
+                200,
+            )
+        else:
+            return jsonify({"message": "Task not found"}, 404)
+
+    return jsonify({"message": "Invalid request method"}, 405)
+
+
+@main.route("/backend/change_board", methods=["PUT"])
+def change_board():
+    """
+    Move a task to a different board.
+
+    Returns:
+    - A JSON response indicating the success of moving the task.
+    - In case of an invalid task, new board, or request method, appropriate error messages with status codes.
+    """
+
+    task_id = int(request.args.get("task_id"))
+    new_board_id = int(request.args.get("new_board_id"))
+
+    # Retrieve the task and the new board
+    task = Task.query.get(task_id)
+    new_board = Task.query.get(new_board_id)
+
+    if task is None or new_board is None:
+        return jsonify({"message": "Task or Board task not found"}, 404)
 
     # Update the parent_task_id of the subtask to the new parent task's ID
-    subtask.parent_task_id = new_parent_task_id
+    task.board_id = new_board_id
     db.session.commit()
 
     return jsonify({"message": "Subtask moved successfully"}, 200)
-
-
-# Create a route for task deletion
-@main.route("/backend/delete_task/<int:task_id>", methods=["DELETE", "OPTIONS"])
-def delete_task(task_id):
-    try:
-        task = Task.query.get(task_id)
-        if task:
-            db.session.delete(task)
-            db.session.commit()
-            return jsonify({"message": "Task deleted successfully"}), 200
-        else:
-            return jsonify({"message": "Task not found"}), 404
-    except Exception as e:
-        return jsonify({"message": "Failed to delete task", "error": str(e)}), 500

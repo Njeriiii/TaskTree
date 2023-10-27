@@ -8,6 +8,7 @@ venv/
 # Ignore compiled Python files
 __pycache__/
 *.pyc
+.pytest_cache
 
 # Ignore IDE-specific files
 .vscode/

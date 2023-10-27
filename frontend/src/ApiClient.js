@@ -1,6 +1,11 @@
 import axios from 'axios';
+// ApiClient is a class for making HTTP requests to a specified API.
+// It uses Axios to send HTTP requests with various HTTP methods (GET, POST, PUT, DELETE)
+// and provides consistent error handling and response structure.
+// The base URL for API requests is obtained from environment variables.
+// Source: React Mega Tutorial Chapter 6 by Miguel Grinberg
 
-// Import the BASE_API_URL from environment variables
+// Import the BASE_API_URL from environment variables in frontend/.env
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
 // Create a class for the ApiClient
@@ -22,7 +27,7 @@ export default class ApiClient {
     if (query !== '') {
         queryUrl = '?' + query;
     }
-       
+
     try {
       // Send the HTTP request using Axios
       // The method and url keys in this object are set by the get(), post(), put() and delete() helper methods, from its input arguments. 

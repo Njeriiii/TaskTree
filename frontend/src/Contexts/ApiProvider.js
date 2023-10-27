@@ -9,6 +9,7 @@ const ApiContext = createContext();
 
 // useApi is a custom hook function for accessing the API context
 export function useApi() {
+    // This custom hook allows components to access the API client instance
   return useContext(ApiContext);
 }
 

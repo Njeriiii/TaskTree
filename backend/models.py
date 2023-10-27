@@ -3,7 +3,9 @@ from flask_login import UserMixin, LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 
+# Define the Board class to represent boards in the application
 class Board(db.Model):
+    # Define table columns
     board_id = db.Column(db.Integer, primary_key=True)
     board_title = db.Column(db.String(100), nullable=False)
 
@@ -14,6 +16,7 @@ class Board(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     user = db.relationship("User", backref="boards")
 
+    # Method to convert Board to a dictionary
     def to_dict(self):
         return {
             "board_id": self.board_id,
@@ -21,34 +24,37 @@ class Board(db.Model):
             "tasks": [task.to_dict() for task in self.tasks],
         }
 
+    # Method to provide a string representation of the Board object
     def __repr__(self):
         return f"Board('{self.board_title}')"
 
 
+# Define the Task class to represent tasks in the application
 class Task(db.Model):
+    # Define table columns
     task_id = db.Column(db.Integer, primary_key=True)
     task_description = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(20), default="new")
 
+    # Define a foreign key relationship to the Board table to link tasks to boards
     board_id = db.Column(db.Integer, db.ForeignKey("board.board_id"), nullable=False)
 
+    # Define a relationship to access the associated board using 'board' attribute
     board = db.relationship("Board", back_populates="tasks")
 
-    parent_id = db.Column(
-        db.Integer, db.ForeignKey("task.task_id"), default=None
-    )  # Self-referencing foreign key
-    user_id = db.Column(
-        db.Integer, db.ForeignKey("user.user_id"), nullable=False
-    )  # Add foreign key to link Task to User
+    # Define a self-referencing foreign key to establish parent-child task relationships
+    parent_id = db.Column(db.Integer, db.ForeignKey("task.task_id"), default=None)
 
+    # Define a foreign key relationship to the User table to link tasks to users
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+
+    # Define a relationship to access the associated user using 'user' attribute
     user = db.relationship("User", back_populates="tasks")
-    parent = db.relationship("Task", remote_side=[task_id])  # each subtask has a parent
 
-    # def __init__(self, task_description, status="new", parent_id=0):
-    #     self.task_description = task_description
-    #     self.status = status
-    #     self.parent_id = parent_id
+    # Define a relationship to access the parent task using 'parent' attribute
+    parent = db.relationship("Task", remote_side=[task_id])
 
+    # Method to convert Task to a dictionary
     def to_dict(self):
         return {
             "task_id": self.task_id,
@@ -57,11 +63,14 @@ class Task(db.Model):
             "parent_id": self.parent_id,
         }
 
+    # Method to provide a string representation of the Task object
     def __repr__(self):
         return f"Task('{self.task_description}')"
 
 
+# Define the User class to represent users in the application
 class User(db.Model, UserMixin):
+    # Define table columns
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(20), nullable=False)
     last_name = db.Column(db.String(20), nullable=False)
@@ -70,6 +79,7 @@ class User(db.Model, UserMixin):
 
     tasks = db.relationship("Task", back_populates="user")
 
+    # Method to convert User to a dictionary
     def to_dict(self):
         return {
             "user_id": self.user_id,
@@ -85,6 +95,7 @@ class User(db.Model, UserMixin):
         return str(self.user_id)
 
 
+# Flask-Login user loader function to load users by ID
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(str(user_id))

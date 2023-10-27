@@ -1,308 +1,758 @@
-/* Reset some default styles */
-body, html {
+/* Color Palette */
+/* Soft Blue: #ADD8E6
+Bright Aqua: #30D5C8
+Light Lavender: #E6E6FA
+Steel Blue: #4682B4
+Forest Green: #228B22 */
+
+/* APP */
+
+body {
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  /* height: 10vh; */
+  /* background-image: linear-gradient(to bottom, #E6E6FA, #ADD8E6);  */
+  overflow-x: hidden;
 }
 
-/* Global styles */
-.header {
-  background-color: #a45ee7; /* Lighter violet color */
-  color: #fff;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px;
-}
-
-.link-button {
-  text-decoration: none;
-  color: #fff;
-  margin: 0 10px;
-}
-
-/* Task Container */
-.task-list-container {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-}
-
-/* Task Column */
-.task-column {
-  flex: 1;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  margin: 0 10px;
-}
-
-/* Task Description */
-.task-description {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-/* Toggle Subtasks Button */
-.show-subtask-button {
-  background-color: #a45ee7;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 10px;
-}
-
-.show-subtask-button:hover {
-  background-color: #8243c0;
-}
-
-/* Subtask Item */
-.subtask-item {
-  margin: 5px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Add Subtask Button */
-.add-subtask-button {
-  background-color: #a45ee7;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 10px;
-}
-
-.add-subtask-button:hover {
-  background-color: #8243c0;
-}
-
-/* Delete button */
-.delete-button {
-  background-color: #ff6347;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-/* Add task form */
-.add-task-form {
+.App {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  /* padding: 2em; */
+  /* height: 150vh; */
+}
+
+.route-content {
+  width: 100%;
+  padding: 1em;
+  background-color: rgba(255, 255, 255, 0.8); 
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  margin-bottom: 1em;
+}
+
+
+/* Header CSS */
+.header {
+background-color: #ADD8E6;  /* Soft Blue */
+padding: 10px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+font-family: 'Roboto', sans-serif;
+}
+
+.link-button, .logout-button {
+background-color: #30D5C8;  /* Bright Aqua */
+padding: 10px 20px;
+margin: 10px;
+text-decoration: none;
+border-radius: 5px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* subtle shadow */
+font-weight: bold;  /* bold text */
+color: #E6E6FA;  /* Light Lavender */
+transition: background-color 0.3s, color 0.3s, transform 0.3s;  /* smooth transition */
+}
+
+.link-button:hover, .logout-button:hover {
+background-color: #4682B4;  /* Steel Blue */
+color: #E6E6FA;  /* Light Lavender */
+transform: translateY(-2px);  /* subtle lift on hover */
+}
+
+.header-link {
+color: #E6E6FA;;  /* Light Lavender */
+font-weight: bold;
+font-size: 30px;
+font-family: 'Roboto Slab', serif;
+}
+
+.header-link:hover {
+color: #30D5C8;  /* Bright Aqua */
+}
+
+.logged-in-title {
+font-size: 24px;
+margin-bottom: 5px;
+font-family: 'Roboto Slab', serif;
+color: #228B22
+}
+
+.user-id, .user-email {
+font-size: 18px;
+margin: 5px 0;
+color: #228B22;
+font-family: 'Roboto Slab', serif;
+}
+.welcome-message {
+  color: #4682B4;
+  font-family: 'Roboto Slab', serif;
+}
+
+
+.not-logged-in-message {
+font-size: 16px;
+margin: 5px 0;
+color: #228B22;
+font-family: 'Roboto Slab', serif;
+}
+
+.spinner {
+color: #30D5C8;  /* Bright Aqua */
+margin-right: 10px;
+}
+
+/* REGISTER / SIGN UP */
+
+.registration-container {
+  background-color: #E6E6FA; /* Light Lavender */
+  padding: 2em 3em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  margin: auto;
+}
+
+.registration-title {
+  color: #001F3F; /* Deep Blue */
+  font-size: 2em;
+  margin-bottom: 1.5em;
+  text-align: center;
+  font-family: 'Roboto Slab', serif;
+}
+
+.error-message {
+  color: #FF0000; /* Red for errors */
+  font-weight: 500;
+  margin: 0.5em 0;
+  text-align: center;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 1.5em;
+}
+
+.form-label {
+  display: block;
+  color: #2B547E; /* Dark Steel Blue */
+  margin-bottom: 0.5em;
+  font-weight: 500;
 }
 
 .input-field {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  width: 100%;
+  padding: 0.8em 1em;
+  border: 1px solid #ADD8E6; /* Soft Blue */
+  border-radius: 4px;
+  font-size: 1em;
+  transition: border-color 0.3s;
 }
 
-.select-list {
-  margin: 10px 0;
+.input-field:focus {
+  outline: none;
+  border-color: #2B547E; /* Dark Steel Blue */
+}
+
+.register-button {
+  padding: 0.8em 1.5em;
+  background-color: #2B547E; /* Dark Steel Blue */
+  color: #E6E6FA; /* Light Lavender */
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.register-button:hover {
+  background-color: #001F3F; /* Deep Blue */
+}
+
+/* LOGIN */
+
+.login-container {
+  background-color: #E6E6FA; /* Light Lavender */
+  padding: 2em 3em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: auto;
+}
+
+.login-title {
+  color: #001F3F; /* Deep Blue */
+  font-size: 2em;
+  margin-bottom: 1.5em;
+  text-align: center;
+  font-family: 'Roboto Slab', serif;
+}
+
+.error-message {
+  color: #FF0000; /* Red for errors */
+  font-weight: 500;
+  margin: 0.5em 0;
+  text-align: center;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 1.5em;
+}
+
+.form-label {
+  display: block;
+  color: #2B547E; /* Dark Steel Blue */
+  margin-bottom: 0.5em;
+  font-weight: 500;
+}
+
+.input-field {
+  width: 100%;
+  padding: 0.8em 1em;
+  border: 1px solid #ADD8E6; /* Soft Blue */
+  border-radius: 4px;
+  font-size: 1em;
+  transition: border-color 0.3s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #2B547E; /* Dark Steel Blue */
+}
+
+.login-button {
+  padding: 0.8em 1.5em;
+  background-color: #2B547E; /* Dark Steel Blue */
+  color: #E6E6FA; /* Light Lavender */
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.login-button:hover {
+  background-color: #001F3F; /* Deep Blue */
+  transform: translateY(-2px);
+}
+
+
+/* Color Palette */
+/* Soft Blue: #ADD8E6
+Bright Aqua: #30D5C8
+Steel Blue: #4682B4
+Forest Green: #228B22 */
+
+/* BOARD FORM CONTAINER */
+.board-form-container {
+  background-color: #ADD8E6; /* Soft Blue as background to provide a soft contrast */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 10%;
+  max-width: 800px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.board-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between form elements */
+}
+
+.input-field {
+  width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  border: 1px solid #30D5C8; /* Bright Aqua for a pop of color */
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  color: #4682B4; /* Steel Blue for text */
+  /* placeholder: #228B22; Forest Green for placeholder text */
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #4682B4; /* Steel Blue on focus to provide a visual cue */
 }
 
 .add-button {
-  background-color: #a45ee7; /* Lighter violet color */
-  color: #fff;
+  padding: 12px 20px;
+  background-color: #30D5C8; /* Bright Aqua for a pop of color */
+  color: #4682B4; /* Steel Blue for text on button */
   border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 4px;
   font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .add-button:hover {
-  background-color: #8243c0; /* Darker violet color on hover */
+  background-color: #001F3F; /* Forest Green for hover effect */
+  transform: translateY(-2px);
 }
 
-/* Button to show the sub-task form */
-.add-sub-task-button {
-  background-color: #a45ee7; /* Lighter violet color */
-  color: #fff;
-  border: none;
-  padding: 6px 10px; /* Adjust padding for smaller size */
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px; /* Adjust font size for smaller text */
-  margin-top: 10px; /* Added some top margin for spacing */
-  margin-left: 10px;
-}
-
-.add-sub-task-button:hover {
-  background-color: #8243c0; /* Darker violet color on hover */
-}
-
-/* Sub-task form */
-.add-sub-task-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  margin: 10px auto; /* Added some margin for spacing */
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-/* Styles for input fields and select lists can be reused */
-.add-sub-task-form .input-field {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.add-sub-task-form .select-list {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-/* Button styles */
-.add-sub-task-form button {
-  background-color: #a45ee7; /* Lighter violet color */
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px; /* Added some top margin for spacing */
-}
-
-.add-sub-task-form button[type="submit"] {
-  background-color: #a45ee7; /* Lighter violet color */
-}
-
-.add-sub-task-form button[type="submit"]:hover {
-  background-color: #8243c0; /* Darker violet color on hover */
-}
-
-
-/* Complete button */
-.complete-button {
-  background-color: #4caf50; /* Green color */
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px; /* Added some top margin for spacing */
-}
-
-.complete-button:hover {
-  background-color: #45a049; /* Darker green color on hover */
-}
-/* Newly Added Parent Task */
-.newly-added-task {
+.new-board-info {
   margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #3498db; /* Blue background color */
-  width: 80%; /* Adjust the width as needed */
-  margin: 0 auto; /* Center the box horizontally */
+  background-color: #4682B4; /* Steel Blue to provide a visual separation */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.newly-added-task h2 {
-  font-size: 18px;
-  margin-bottom: 10px; /* Add margin for separation */
+.new-board-label {
+  font-weight: bold;
+  color: #001F3F; /* Deep Blue for emphasis */
 }
 
-.newly-added-task ul {
-  list-style: none;
+.board-title, .board-id {
+  color: #ADD8E6; /* Soft Blue for information */
+  margin: 5px 0; 
+}
+
+
+/* BOARDS CONTAINER */
+.boards-container {
+  background-color: #ADD8E6; /* Soft Blue for a soft background */
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 10%;
+  max-width: 800px;
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  
+}
+
+.boards-title {
+  color: #4682B4; /* Steel Blue for title emphasis */
+  font-size: 30px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.not-found-message, .add-task-container-text, .no-boards-message {
+  color: #4682B4; /* Steel Blue for information messages */
+  font-style: italic;
+  font-family: 'Roboto Slab', serif;
+  font-size: 20px;
+}
+
+.board-list {
+  list-style-type: none; /* Removing the default bullet points */
+  margin: 0;
   padding: 0;
 }
 
-.newly-added-task li {
-  margin: 5px 0; /* Reduced margin */
-  display: block;
+.board-list-item {
+  display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #ADD8E6; /* Soft Blue for individual board items */
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 10px; /* Spacing between board items */
+  transition: background-color 0.3s;
 }
 
-.newly-added-task button {
-  background-color: #a45ee7; /* Lighter violet color */
-  color: #fff;
+.board-list-item:hover {
+  background-color: #001F3F; /* Steel Blue for hover effect */
+}
+
+.board-link {
+  text-decoration: none; /* Removing the default link styling */
+  color: #4682B4; /* Steel Blue for board link text */
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.board-link:hover {
+  color: #ADD8E6; /* Soft Blue for hover effect on link */
+}
+
+.add-task-button {
+  padding: 5px 15px;
+  background-color: #4682B4; /* Steel Blue for the "Add Task" button */
+  color: #ADD8E6; /* Soft Blue for the button text */
   border: none;
-  padding: 6px 10px; /* Adjust padding for smaller size */
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px; /* Adjust font size for smaller text */
-  margin-left: 10px;
-}
-
-.newly-added-task button:hover {
-  background-color: #8243c0; /* Darker violet color on hover */
-}
-
-/* CSS for Sub-Tasks List */
-.task-list {
-  margin-top: 20px;
-  width: 80%;
-  margin: 0 auto; /* Center the box horizontally */
+  transition: background-color 0.3s, transform 0.3s;
+  /* margin-left: 200px; */
 
 }
 
-.task-list h2 {
-  font-size: 1.5rem;
+.add-task-button:hover {
+  background-color: #ADD8E6; /* Soft Blue for hover effect */
+  color: #4682B4; /* Steel Blue for text on hover */
+  transform: translateY(-2px);
+}
+
+
+/* ADD TASK CONTAINER */
+.add-task-container {
+  background-color: #ADD8E6;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 10%;
+  max-width: 800px;
+}
+
+.add-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #4682B4;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  color: #4682B4;
+  resize: vertical;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  line-height: 1.5; /* For better readability */
+}
+
+.input-field:focus {
+  border-color: #ADD8E6;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.select-list {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #4682B4;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #FFF;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5" fill="%234682B4"><path d="M2 0L0 2h4L2 0zm0 5L0 3h4l-2 2z"/></svg>'); /* This adds a custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 0.5em center, 100% 100%;
+  background-size: 0.65em auto, 100%;
+  color: #4682B4;
+  cursor: pointer;
+  appearance: none; /* Remove default arrow in some browsers */
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.select-list:hover {
+  background-color: #eef5f9;
+}
+
+.select-list:focus {
+  border-color: #ADD8E6;
+  outline: none;
+}
+
+.add-button, .complete-button {
+  padding: 10px 15px;
+  background-color: #4682B4;
+  color: #ADD8E6;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s, color 0.3s;
   margin-bottom: 10px;
 }
 
-.task-list ul {
-  list-style-type: none;
-  padding: 0;
+.add-button:hover, .complete-button:hover {
+  background-color: #001F3F;
+  color: #4682B4;
+  transform: translateY(-2px);
 }
 
-.task-list li {
-  display: block;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #000000;
-  background-color: #8243c0; /* Add a background color */
+/* TASK LIST */
+/* Task List Container */
+.task-list-container {
+  width: 100%;
+  max-width: 2000px;
+  /* margin: 20px auto; */
+  background-color: #F4F6F6; 
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
 }
 
-.add-sub-task-button {
-  background-color: #007bff;
-  color: #fff;
+.task-column {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Task and Subtask Items */
+.task-item, .subtask-item {
+  list-style-type: none; 
+  background-color: #FFFFFF;
+  border: 1px solid #E0E0E0;
+  border-radius: 5px;
+  padding: 15px 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.2s;
+  margin-bottom: 30px;
+  margin-top: 15px;
+}
+
+.task-item:hover, .subtask-item:hover {
+  transform: scale(1.02);
+}
+
+.task-description, .archived-task-description {
+  font-size: 18px;
+  color: #4682B4;
+  margin-bottom: 15px;
+  font-weight: 500;
+  font-size: 24px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: #4682B4; /* Steel Blue for title emphasis */
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  background-color: #ffffff; /* White background for task items */
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px; /* Spacing between task items */
+  font-family: 'Roboto Slab', serif;
+}
+
+
+/* Buttons */
+button {
+  padding: 8px 15px;
+  border-radius: 4px;
+  border: none;
+  margin: 0 7px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  font-weight: 500;
+}
+
+.show-subtask-button {
+  background-color: #F39C12;
+  color: #FFFFFF;
+}
+
+.edit-task-button {
+  background-color: #2980B9;
+  color: #FFFFFF;
+}
+
+.mark-complete-button {
+  background-color: #27AE60;
+  color: #FFFFFF;
+}
+
+.add-subtask-button {
+  background-color: #8E44AD;
+  color: #FFFFFF;
+}
+
+.move-task-button {
+  background-color: #7F8C8D;
+  color: #FFFFFF;
+}
+
+button:hover {
+  background-color: #2C3E50; 
+  color: #FFFFFF;
+}
+
+.subtask-item {
+  margin-left: 25px;
+}
+
+/* EDIT TASK */
+.edit-task-container, .edit-board-container {
+  width: 100%;
+  background-color: #f7f9fc; /* Light background to distinguish the edit container */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 700px; /* You can adjust this based on your design needs */
+}
+
+.edit-task-form, .edit-board-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+  color: #4682B4; /* Steel Blue for title emphasis */
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.input-field, .select-list {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #e0e0e0; /* Neutral border color */
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-field:focus, .select-list:focus {
+  border-color: #5c6ac4; /* Highlight border on focus */
+  box-shadow: 0 0 3px #5c6ac4; /* Subtle box shadow to draw attention */
+  outline: none;
+}
+
+.update-button, .cancel-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.update-button {
+  background-color: #5c6ac4; /* Use a calm color for updating */
+  color: #ffffff;
+}
+
+.cancel-button {
+  background-color: #f44336; /* Red color to indicate cancellation */
+  color: #ffffff;
+  margin-left: 15px;
+}
+
+.update-button:hover {
+  background-color: #4b5aad; /* Slightly darker shade on hover */
+}
+
+.cancel-button:hover {
+  background-color: #e23525; /* Slightly darker shade on hover */
+}
+
+/* TASK ARCHIVE */
+.tasks-archive-container {
+  width: 100%;
+  background-color: #f7f9fc; /* Light background for the container */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 700px; /* Adjustable based on your design needs */
+}
+
+.archived-tasks-title 
+{
+  color: #4682B4; /* Steel Blue for title emphasis */
+  font-size: 24px;
+  border-bottom: 2px solid #4682B4; 
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.error-message {
+  color: #e74c3c; /* A red color for error messages */
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+
+/* MOVE TASK */
+/* Change Parent Task Container */
+.change-parent-task-container {
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f6f8fa; /* Light gray to give the container a distinct look */
+  width: 100%;
+  max-width: 500px; /* You can adjust this based on your preference */
+  margin: 0 auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Dropdown */
+.destination-root-task-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5da; /* Subtle gray for the border */
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #ffffff; /* White for clarity */
+  color: #333333; /* Dark for text */
+  cursor: pointer; /* Indicate it's selectable */
+}
+
+.root-task-option {
+  padding: 5px;
+  color: #586069; /* Dark gray for the dropdown items */
+}
+
+/* Buttons */
+.move-subtask-button
+{
+  padding: 10px 15px;
   border: none;
   border-radius: 4px;
-  padding: 5px 10px;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; 
+  width: 100%;
 }
 
-.add-sub-task-button:hover {
-  background-color: #0056b3;
+.move-subtask-button {
+  background-color: #0366d6; /* A shade of blue */
+  color: #ffffff; /* White text */
 }
 
+.move-subtask-button:hover {
+  background-color: #005cbf; /* A darker shade of blue for hover */
+  transform: translateY(-2px); 
+}
 
+/* .cancel-button { */
+  /* background-color: #f8f9fa; Light gray */
+  /* color: #24292e; Almost black for contrast */
+  /* border: 1px solid #d1d5da; Subtle gray for the border */
+/* } */
+
+.cancel-button:hover {
+  background-color: #ebedef; /* Slightly darker gray for hover */
+  transform: translateY(-2px); 
+}

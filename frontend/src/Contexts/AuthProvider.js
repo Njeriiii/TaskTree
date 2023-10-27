@@ -1,13 +1,15 @@
-import { createContext, useContext } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useApi } from '../Contexts/ApiProvider';
 
+// Create a context for managing user authentication
 const AuthContext = createContext();
 
+// Custom hook to access the authentication context
 export function useAuth() {
     return useContext(AuthContext);
 }
 
+// AuthProvider is a component that wraps its children with the authentication context
 export function AuthProvider({ children }) {
     const api = useApi(); // Initialize the API client using the custom hook
     const [user, setUser] = useState(null);
@@ -40,8 +42,7 @@ export function AuthProvider({ children }) {
 
             if (response.status === 200) {
                 // Sign-up was successful
-                // setIsAuthenticated(true);
-                fetchData(); // Fetch user data if needed
+                fetchData();
             } else {
                 console.error('Sign-up failed. Please try again.');
             }
@@ -73,13 +74,10 @@ export function AuthProvider({ children }) {
     const fetchData = async () => {
         try {
             const response = await api.get('/current_user');
-            console.log(isAuthenticated)
 
             if (response.status === 200) {
                 const userData = response.body;
                 setUser(userData);
-                // setIsAuthenticated(true);
-                console.log(response)
             } else {
                 console.error('Failed to fetch user data');
             }
@@ -87,11 +85,6 @@ export function AuthProvider({ children }) {
             console.error('Error:', error);
         }
     };
-
-    // Use an effect to update user when the response data changes
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     // Use an effect to check if the user is authenticated on component mount
     useEffect(() => {
@@ -101,14 +94,10 @@ export function AuthProvider({ children }) {
                 if (response.status === 200) {
                     setIsAuthenticated(true);
                     fetchData();
-                    console.log("mschew")
-                    console.log(response.status)
-                    console.log(isAuthenticated)
                 }
             } catch (error) {
                 setIsAuthenticated(false);
             }
-            console.log(isAuthenticated)
         })();
     }, [api]);
 

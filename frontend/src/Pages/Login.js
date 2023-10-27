@@ -3,35 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Contexts/AuthProvider'; // Import the useAuth hook
 
 function Login() {
-    const { handleLogin } = useAuth(); // Access the handleLogin function
+    // Access the handleLogin function from the AuthProvider context
+    const { handleLogin } = useAuth(); 
+
+    // Access the navigate function from react-router-dom
+    const navigate = useNavigate();
+
+    // Initialize a state to hold form data (email and password)
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
-    const [errorMessage, setErrorMessage] = useState('');
-    const navigate = useNavigate();
 
+    // Initialize state to manage error messages
+    const [errorMessage, setErrorMessage] = useState('');
+
+    // Handle form input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            // Call the handleLogin function from useAuth
-            const response = await handleLogin(formData);
+            // Call the handleLogin function from useAuth to perform login
+            await handleLogin(formData);
 
-            if (response.status === 200) {
-                // Login successful, you can redirect to the user dashboard or another page
-                navigate('/')
-            } else if (response.status === 401) {
-                setErrorMessage('Invalid email or password');
-            } else {
-                // Handle other response statuses as needed
-                setErrorMessage('Login failed. Please try again.');
-            }
+            // Redirect to the home page after successful login
+            navigate('/')
         } catch (error) {
             console.error('Error:', error);
             setErrorMessage('An error occurred during login.');
@@ -39,29 +41,31 @@ function Login() {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
+        <div className="login-container">
+            <h2 className="login-title">Login</h2>
             {errorMessage && <div className="error-message">{errorMessage}</div>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email:</label>
+            <form onSubmit={handleSubmit} className="login-form">
+                <div className="form-group">
+                    <label className="form-label">Email:</label>
                     <input
                         type="text"
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
+                        className="input-field"
                     />
                 </div>
-                <div>
-                    <label>Password:</label>
+                <div className="form-group">
+                    <label className="form-label">Password:</label>
                     <input
                         type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleInputChange}
+                        className="input-field"
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" className="login-button">Login</button>
             </form>
         </div>
     );

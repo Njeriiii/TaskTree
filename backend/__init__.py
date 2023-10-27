@@ -32,16 +32,13 @@ def create_app():
     # Import your models
     from . import models
 
-    # Import your blueprints (main and auth)
+    # Import blueprints (main and auth)
     from .main import main as main_blueprint
     from .auth import auth as auth_blueprint
 
-    # Register your blueprints
+    # Register blueprints
     app.register_blueprint(main_blueprint)
     app.register_blueprint(auth_blueprint)
-
-    # login_manager.login_view = "auth.login"  # Set the login view (the login route)
-    login_manager.init_app(app)  # Initialize the login manager with your Flask app
 
     if __name__ == "__main__":
         app.run(host="0.0.0.0", port=5162)
